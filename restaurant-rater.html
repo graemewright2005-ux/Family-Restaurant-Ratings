@@ -124,20 +124,20 @@
 
 <script type="module">
     // 1. Import Firebase dependencies from CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { initializeApp } from "firebase/app";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     // ==========================================
     // 🛑 STOP HERE: PASTE YOUR FIREBASE CONFIG
     // ==========================================
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_MESSAGING_ID",
-        appId: "YOUR_APP_ID"
-    };
+   const firebaseConfig = {
+  apiKey: "AIzaSyCKT4ElJIQGNF_hfkYsss1_fPABIgfxBwc",
+  authDomain: "family-food-tracker-cf1c5.firebaseapp.com",
+  projectId: "family-food-tracker-cf1c5",
+  storageBucket: "family-food-tracker-cf1c5.firebasestorage.app",
+  messagingSenderId: "447280140705",
+  appId: "1:447280140705:web:5686153d7bfbffd68afbe0"
+};
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
