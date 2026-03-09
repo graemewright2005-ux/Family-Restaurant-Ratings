@@ -123,21 +123,19 @@
 </div>
 
 <script type="module">
-    // 1. Import Firebase dependencies from CDN
-    import { initializeApp } from "firebase/app";
+    // CORRECTED IMPORTS: Browsers need the full URL to the Firebase libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    // ==========================================
-    // 🛑 STOP HERE: PASTE YOUR FIREBASE CONFIG
-    // ==========================================
-   const firebaseConfig = {
-  apiKey: "AIzaSyCKT4ElJIQGNF_hfkYsss1_fPABIgfxBwc",
-  authDomain: "family-food-tracker-cf1c5.firebaseapp.com",
-  projectId: "family-food-tracker-cf1c5",
-  storageBucket: "family-food-tracker-cf1c5.firebasestorage.app",
-  messagingSenderId: "447280140705",
-  appId: "1:447280140705:web:5686153d7bfbffd68afbe0"
-};
+    // Your exact Firebase config
+    const firebaseConfig = {
+        apiKey: "AIzaSyCKT4ElJIQGNF_hfkYsss1_fPABIgfxBwc",
+        authDomain: "family-food-tracker-cf1c5.firebaseapp.com",
+        projectId: "family-food-tracker-cf1c5",
+        storageBucket: "family-food-tracker-cf1c5.firebasestorage.app",
+        messagingSenderId: "447280140705",
+        appId: "1:447280140705:web:5686153d7bfbffd68afbe0"
+    };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -191,7 +189,7 @@
                     <label>What was it?</label><input type="text" class="dish-desc" required>
                 </div>
                 <div style="display: flex; gap: 5px; align-items: flex-end;">
-                    <div style="width: 100%;"><label>Score</label><input type="number" class="dish-score" min="1" max="10" required></div>
+                    <div style="width: 100%;"><label>Score (1-10)</label><input type="number" class="dish-score" min="1" max="10" required></div>
                     <button type="button" class="remove-btn" onclick="document.getElementById('${dishId}').remove()">X</button>
                 </div>
             </div>
@@ -251,7 +249,7 @@
             window.addDiner();
         } catch (error) {
             console.error("Error adding document: ", error);
-            alert("Error saving! Check console.");
+            alert("Error saving! Check the browser console.");
         } finally {
             document.getElementById('submitBtn').innerText = "💾 Save to Cloud";
         }
@@ -269,7 +267,7 @@
         document.getElementById('status-indicator').style.color = "var(--neon-green)";
         updateUI();
     }, (error) => {
-        document.getElementById('status-indicator').innerText = "🔴 Disconnected / Setup Required";
+        document.getElementById('status-indicator').innerText = "🔴 Disconnected (Check Rules)";
         console.error("Firebase listen error:", error);
     });
 
