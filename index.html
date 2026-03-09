@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Restaurant Reviews</title>
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --dark: #2d3436;
+            --light: #f7f1e3;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        header {
+            text-align: center;
+            grid-column: 1 / -1;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .rating-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background: var(--light);
+            padding: 15px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #ff5252;
+        }
+        .top-three {
+            grid-column: 1 / -1;
+        }
+        .dashboard-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .winner-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2b9eb3 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .winner-rank {
+            font-size: 24px;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 50%;
+        }
+        .history-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .tag {
+            background: var(--light);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🍽️ Our Restaurant Rating Tracker</h1>
+    </header>
+
+    <div class="card">
+        <h2>Add a New Meal</h2>
+        <form id="reviewForm">
+            <div class="form-group">
+                <label>Restaurant Name</label>
+                <input type="text" id="resName" required placeholder="Where did we eat?">
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="resLocation" required placeholder="City or Neighborhood">
+            </div>
+            <div class="form-group">
+                <label>Type of Restaurant</label>
+                <select id="resType">
+                    <option value="Italian">Italian</option>
+                    <option value="Thai">Thai</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Tapas">Tapas</option>
+                    <option value="Indian">Indian</option>
+                    <option value="British">British</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Food Deep-Dive (Free text)</label>
+                <textarea id="resNotes" rows="3" placeholder="What exactly did we eat? (e.g., Spicy salmon roll, medium-rare steak, sticky toffee pudding...)"></textarea>
+            </div>
+
+            <label>Ratings (1 to 10)</label>
+            <div class="rating-grid">
+                <div>
+                    <label>Starter</label>
+                    <input type="number" id="rateStarter" min="1" max="10" required>
+                </div>
+                <div>
+                    <label>Main</label>
+                    <input type="number" id="rateMain" min="1" max="10" required>
+                </div>
+                <div>
+                    <label>Dessert</label>
+                    <input type="number" id="rateDessert" min="1" max="10" required>
+                </div>
+                <div>
+                    <label>Drinks</label>
+                    <input type="number" id="rateDrinks" min="1" max="10" required>
+                </div>
+                <div>
+                    <label>Value</label>
+                    <input type="number" id="rateValue" min="1" max="10" required>
+                </div>
+                <div>
+                    <label>Ambiance</label>
+                    <input type="number" id="rateAmbiance" min="1" max="10" required>
+                </div>
+            </div>
+
+            <button type="submit">Save Review</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>All Reviews</h2>
+        <div id="historyList">
+            </div>
+    </div>
+
+    <div class="card top-three">
+        <h2>🏆 Top 3 Dashboard</h2>
+        <div class="dashboard-controls">
+            <label style="margin: 0;">Show me the Top 3 based on:</label>
+            <select id="sortFilter" style="width: 200px;">
+                <option value="overall">Overall Average</option>
+                <option value="foodAvg">Food Average (Starter/Main/Dessert)</option>
+                <option value="value">Value</option>
+                <option value="ambiance">Ambiance</option>
+                <option value="main">Best Mains</option>
+            </select>
+        </div>
+        <div id="top3List">
+            </div>
+    </div>
+</div>
+
+<script>
+    // Initialize array from local storage, or create empty array
+    let reviews = JSON.parse(localStorage.getItem('restaurantReviews')) || [];
+
+    // DOM Elements
+    const form = document.getElementById('reviewForm');
+    const sortFilter = document.getElementById('sortFilter');
+    const historyList = document.getElementById('historyList');
+    const top3List = document.getElementById('top3List');
+
+    // Event Listeners
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const newReview = {
+            id: Date.now(),
+            name: document.getElementById('resName').value,
+            location: document.getElementById('resLocation').value,
+            type: document.getElementById('resType').value,
+            notes: document.getElementById('resNotes').value,
+            scores: {
+                starter: parseInt(document.getElementById('rateStarter').value),
+                main: parseInt(document.getElementById('rateMain').value),
+                dessert: parseInt(document.getElementById('rateDessert').value),
+                drinks: parseInt(document.getElementById('rateDrinks').value),
+                value: parseInt(document.getElementById('rateValue').value),
+                ambiance: parseInt(document.getElementById('rateAmbiance').value)
+            }
+        };
+
+        // Calculate Averages
+        newReview.foodAvg = ((newReview.scores.starter + newReview.scores.main + newReview.scores.dessert) / 3).toFixed(1);
+        let totalScore = 0;
+        for (let key in newReview.scores) { totalScore += newReview.scores[key]; }
+        newReview.overall = (totalScore / 6).toFixed(1);
+
+        reviews.push(newReview);
+        localStorage.setItem('restaurantReviews', JSON.stringify(reviews));
+        
+        form.reset();
+        updateUI();
+    });
+
+    sortFilter.addEventListener('change', updateUI);
+
+    // Update the UI
+    function updateUI() {
+        renderHistory();
+        renderTop3();
+    }
+
+    function renderHistory() {
+        historyList.innerHTML = '';
+        if(reviews.length === 0) {
+            historyList.innerHTML = '<p>No reviews yet. Add your first meal!</p>';
+            return;
+        }
+
+        // Show latest 10 reviews
+        const reversed = [...reviews].reverse().slice(0, 10);
+        
+        reversed.forEach(rev => {
+            historyList.innerHTML += `
+                <div class="history-item">
+                    <strong>${rev.name}</strong> <span class="tag">${rev.type}</span> <span class="tag">📍 ${rev.location}</span><br>
+                    <small><em>"${rev.notes}"</em></small><br>
+                    <small>Overall: ${rev.overall}/10 | Food: ${rev.foodAvg}/10 | Value: ${rev.scores.value}/10</small>
+                </div>
+            `;
+        });
+    }
+
+    function renderTop3() {
+        top3List.innerHTML = '';
+        if(reviews.length === 0) {
+            top3List.innerHTML = '<p>Need more data to show the Top 3!</p>';
+            return;
+        }
+
+        const criteria = sortFilter.value; // overall, foodAvg, value, ambiance, main
+        
+        // Sort array based on selected criteria
+        let sorted = [...reviews].sort((a, b) => {
+            if (criteria === 'overall') return b.overall - a.overall;
+            if (criteria === 'foodAvg') return b.foodAvg - a.foodAvg;
+            if (criteria === 'value') return b.scores.value - a.scores.value;
+            if (criteria === 'ambiance') return b.scores.ambiance - a.scores.ambiance;
+            if (criteria === 'main') return b.scores.main - a.scores.main;
+        });
+
+        // Get Top 3
+        const top3 = sorted.slice(0, 3);
+
+        top3.forEach((rev, index) => {
+            let scoreDisplay = '';
+            if (criteria === 'overall') scoreDisplay = `${rev.overall} / 10`;
+            if (criteria === 'foodAvg') scoreDisplay = `${rev.foodAvg} / 10`;
+            if (criteria === 'value') scoreDisplay = `${rev.scores.value} / 10`;
+            if (criteria === 'ambiance') scoreDisplay = `${rev.scores.ambiance} / 10`;
+            if (criteria === 'main') scoreDisplay = `${rev.scores.main} / 10`;
+
+            top3List.innerHTML += `
+                <div class="winner-card">
+                    <div class="winner-rank">#${index + 1}</div>
+                    <div style="flex-grow: 1; margin-left: 15px;">
+                        <h3 style="margin: 0;">${rev.name}</h3>
+                        <small>${rev.type} • 📍 ${rev.location}</small>
+                    </div>
+                    <div style="font-size: 20px; font-weight: bold;">
+                        ${scoreDisplay}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Initial load
+    updateUI();
+</script>
+
+</body>
+</html>
