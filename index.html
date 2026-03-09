@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Restaurant Reviews</title>
+    <title>Neon Restaurant Reviews</title>
     <style>
         :root {
-            --primary: #ff6b6b;
-            --secondary: #4ecdc4;
-            --dark: #2d3436;
-            --light: #f7f1e3;
+            --bg-color: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-green: #39ff14;
+            --text-main: #e0e0e0;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            color: var(--dark);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 20px;
         }
@@ -25,10 +27,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 800px) {
+            .container { grid-template-columns: 1fr; }
         }
         header {
             text-align: center;
@@ -36,92 +36,136 @@
             margin-bottom: 20px;
         }
         h1 {
-            color: var(--primary);
-            border-bottom: 3px solid var(--secondary);
-            display: inline-block;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+            border-bottom: 1px solid var(--neon-pink);
             padding-bottom: 10px;
         }
         .card {
-            background: white;
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #333;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
+        .form-group { margin-bottom: 15px; }
         label {
             display: block;
-            font-weight: bold;
+            font-size: 14px;
             margin-bottom: 5px;
+            color: #aaa;
         }
         input, select, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
             border-radius: 5px;
             box-sizing: border-box;
+            transition: all 0.3s ease;
         }
-        .rating-grid {
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+        }
+        .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            background: var(--light);
-            padding: 15px;
-            border-radius: 5px;
+            gap: 15px;
         }
         button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            padding: 10px 15px;
             cursor: pointer;
             border-radius: 5px;
-            font-size: 16px;
-            width: 100%;
             font-weight: bold;
-            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            width: 100%;
         }
         button:hover {
-            background-color: #ff5252;
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
         }
-        .top-three {
-            grid-column: 1 / -1;
+        .btn-pink {
+            color: var(--neon-pink);
+            border-color: var(--neon-pink);
         }
-        .dashboard-controls {
-            display: flex;
-            gap: 10px;
+        .btn-pink:hover {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+        .btn-green {
+            color: var(--neon-green);
+            border-color: var(--neon-green);
+            margin-top: 15px;
+        }
+        .btn-green:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+        .diner-section {
+            background: #252525;
+            padding: 15px;
+            border-radius: 5px;
             margin-bottom: 15px;
-            align-items: center;
+            border-left: 3px solid var(--neon-cyan);
+        }
+        .dish-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 3fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: end;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px dashed #444;
+        }
+        .remove-btn {
+            color: #ff4444; border-color: #ff4444; padding: 10px 5px; font-size: 12px;
+        }
+        .remove-btn:hover { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+        
+        /* Dashboard styles */
+        .top-three { grid-column: 1 / -1; }
+        .dashboard-controls {
+            display: flex; gap: 10px; margin-bottom: 20px; align-items: center; background: #222; padding: 10px; border-radius: 5px;
         }
         .winner-card {
-            background: linear-gradient(135deg, var(--secondary) 0%, #2b9eb3 100%);
-            color: white;
+            background: #222;
+            border: 1px solid #333;
+            border-left: 4px solid var(--neon-green);
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: transform 0.2s;
         }
+        .winner-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(57, 255, 20, 0.2); }
         .winner-rank {
-            font-size: 24px;
-            font-weight: bold;
-            background: rgba(255,255,255,0.2);
-            padding: 10px 15px;
-            border-radius: 50%;
+            font-size: 24px; font-weight: bold; color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); margin-right: 15px;
         }
         .history-item {
-            border-bottom: 1px solid #eee;
-            padding: 10px 0;
+            border-bottom: 1px solid #333; padding: 15px 0;
         }
         .tag {
-            background: var(--light);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--dark);
+            background: #333; padding: 4px 10px; border-radius: 12px; font-size: 11px; color: var(--neon-cyan); border: 1px solid var(--neon-cyan);
         }
     </style>
 </head>
@@ -129,213 +173,284 @@
 
 <div class="container">
     <header>
-        <h1>🍽️ Our Restaurant Rating Tracker</h1>
+        <h1>NEON BITES</h1>
+        <p style="color: #888; margin-top: 0;">Family Restaurant Tracker</p>
     </header>
 
-    <div class="card">
-        <h2>Add a New Meal</h2>
+    <div class="card" style="grid-column: 1 / -1;">
+        <h2>Add a New Visit</h2>
         <form id="reviewForm">
-            <div class="form-group">
-                <label>Restaurant Name</label>
-                <input type="text" id="resName" required placeholder="Where did we eat?">
-            </div>
-            <div class="form-group">
-                <label>Location</label>
-                <input type="text" id="resLocation" required placeholder="City or Neighborhood">
-            </div>
-            <div class="form-group">
-                <label>Type of Restaurant</label>
-                <select id="resType">
-                    <option value="Italian">Italian</option>
-                    <option value="Thai">Thai</option>
-                    <option value="Portuguese">Portuguese</option>
-                    <option value="Tapas">Tapas</option>
-                    <option value="Indian">Indian</option>
-                    <option value="British">British</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Other">Other</option>
-                </select>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Restaurant Name</label>
+                    <input type="text" id="resName" required placeholder="Where did we eat?">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="resLocation" required placeholder="City or area">
+                </div>
             </div>
             
-            <div class="form-group">
-                <label>Food Deep-Dive (Free text)</label>
-                <textarea id="resNotes" rows="3" placeholder="What exactly did we eat? (e.g., Spicy salmon roll, medium-rare steak, sticky toffee pudding...)"></textarea>
-            </div>
-
-            <label>Ratings (1 to 10)</label>
-            <div class="rating-grid">
-                <div>
-                    <label>Starter</label>
-                    <input type="number" id="rateStarter" min="1" max="10" required>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Cuisine Type</label>
+                    <select id="resType">
+                        <option value="Italian">Italian</option>
+                        <option value="Thai">Thai</option>
+                        <option value="Portuguese">Portuguese</option>
+                        <option value="Tapas">Tapas</option>
+                        <option value="Indian">Indian</option>
+                        <option value="British">British</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
-                <div>
-                    <label>Main</label>
-                    <input type="number" id="rateMain" min="1" max="10" required>
-                </div>
-                <div>
-                    <label>Dessert</label>
-                    <input type="number" id="rateDessert" min="1" max="10" required>
-                </div>
-                <div>
-                    <label>Drinks</label>
-                    <input type="number" id="rateDrinks" min="1" max="10" required>
-                </div>
-                <div>
-                    <label>Value</label>
-                    <input type="number" id="rateValue" min="1" max="10" required>
-                </div>
-                <div>
-                    <label>Ambiance</label>
-                    <input type="number" id="rateAmbiance" min="1" max="10" required>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Value (1-10)</label>
+                        <input type="number" id="rateValue" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ambiance (1-10)</label>
+                        <input type="number" id="rateAmbiance" min="1" max="10" required>
+                    </div>
                 </div>
             </div>
 
-            <button type="submit">Save Review</button>
+            <div id="dinersContainer">
+                </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button type="button" class="btn-pink" onclick="addDiner()">+ Add Family Member</button>
+                <button type="submit" class="btn-green">💾 Save Full Review</button>
+            </div>
         </form>
     </div>
 
     <div class="card">
-        <h2>All Reviews</h2>
-        <div id="historyList">
-            </div>
+        <h2>Recent Meals</h2>
+        <div id="historyList"></div>
     </div>
 
     <div class="card top-three">
-        <h2>🏆 Top 3 Dashboard</h2>
+        <h2>🏆 Top 3 Leaderboard</h2>
         <div class="dashboard-controls">
-            <label style="margin: 0;">Show me the Top 3 based on:</label>
-            <select id="sortFilter" style="width: 200px;">
-                <option value="overall">Overall Average</option>
-                <option value="foodAvg">Food Average (Starter/Main/Dessert)</option>
-                <option value="value">Value</option>
-                <option value="ambiance">Ambiance</option>
-                <option value="main">Best Mains</option>
+            <label style="margin: 0; color: #fff;">Sort by:</label>
+            <select id="sortFilter" style="width: 250px;">
+                <option value="overall">Highest Overall Average</option>
+                <option value="foodAvg">Best Food (Family Average)</option>
+                <option value="value">Best Value</option>
+                <option value="ambiance">Best Ambiance</option>
             </select>
         </div>
-        <div id="top3List">
-            </div>
+        <div id="top3List"></div>
     </div>
 </div>
 
 <script>
-    // Initialize array from local storage, or create empty array
-    let reviews = JSON.parse(localStorage.getItem('restaurantReviews')) || [];
+    let reviews = JSON.parse(localStorage.getItem('neonReviews')) || [];
+    let dinerCount = 0;
+    let dishCount = 0;
 
-    // DOM Elements
-    const form = document.getElementById('reviewForm');
-    const sortFilter = document.getElementById('sortFilter');
-    const historyList = document.getElementById('historyList');
-    const top3List = document.getElementById('top3List');
+    // Initialize with one diner
+    document.addEventListener("DOMContentLoaded", () => {
+        addDiner();
+        updateUI();
+    });
 
-    // Event Listeners
-    form.addEventListener('submit', function(e) {
+    function addDiner() {
+        dinerCount++;
+        const dinerId = `diner-${dinerCount}`;
+        const container = document.getElementById('dinersContainer');
+        
+        const html = `
+            <div class="diner-section" id="${dinerId}">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <input type="text" class="diner-name" placeholder="Name (e.g., Dad, Daughter)" style="width: 40%; font-weight: bold; color: var(--neon-cyan); border:none; background: transparent; border-bottom: 1px solid var(--neon-cyan); border-radius: 0; padding: 5px;">
+                    <button type="button" class="remove-btn" style="width: auto; padding: 5px 10px;" onclick="document.getElementById('${dinerId}').remove()">X</button>
+                </div>
+                <div id="dishes-${dinerId}"></div>
+                <button type="button" style="font-size: 12px; padding: 5px; margin-top: 10px;" onclick="addDish('${dinerId}')">+ Add Dish for this person</button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        addDish(dinerId); // Add one empty dish row by default
+    }
+
+    function addDish(dinerId) {
+        dishCount++;
+        const dishId = `dish-${dishCount}`;
+        const container = document.getElementById(`dishes-${dinerId}`);
+        
+        const html = `
+            <div class="dish-row" id="${dishId}">
+                <div>
+                    <label>Course</label>
+                    <select class="dish-course">
+                        <option value="Starter">Starter</option>
+                        <option value="Main">Main</option>
+                        <option value="Dessert">Dessert</option>
+                        <option value="Drink">Drink</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select class="dish-category">
+                        <option value="Fish">Fish</option>
+                        <option value="Meat">Meat</option>
+                        <option value="Poultry">Poultry</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                        <option value="Sweet">Sweet</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label>What was it?</label>
+                    <input type="text" class="dish-desc" placeholder="Free type here..." required>
+                </div>
+                <div style="display: flex; gap: 5px; align-items: flex-end;">
+                    <div style="width: 100%;">
+                        <label>Score</label>
+                        <input type="number" class="dish-score" min="1" max="10" required>
+                    </div>
+                    <button type="button" class="remove-btn" onclick="document.getElementById('${dishId}').remove()">X</button>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
+        // Gather all diner data
+        let dinersData = [];
+        let totalFoodScore = 0;
+        let foodItemCount = 0;
+
+        document.querySelectorAll('.diner-section').forEach(dinerEl => {
+            const dinerName = dinerEl.querySelector('.diner-name').value || "Anonymous";
+            let dishes = [];
+            
+            dinerEl.querySelectorAll('.dish-row').forEach(dishEl => {
+                const score = parseInt(dishEl.querySelector('.dish-score').value);
+                dishes.push({
+                    course: dishEl.querySelector('.dish-course').value,
+                    category: dishEl.querySelector('.dish-category').value,
+                    desc: dishEl.querySelector('.dish-desc').value,
+                    score: score
+                });
+                totalFoodScore += score;
+                foodItemCount++;
+            });
+
+            if(dishes.length > 0) {
+                dinersData.push({ name: dinerName, dishes: dishes });
+            }
+        });
+
+        const valueScore = parseInt(document.getElementById('rateValue').value);
+        const ambianceScore = parseInt(document.getElementById('rateAmbiance').value);
+        const foodAvg = foodItemCount > 0 ? (totalFoodScore / foodItemCount) : 0;
+        
+        // Overall is Food Average + Value + Ambiance divided by 3
+        const overallScore = ((foodAvg + valueScore + ambianceScore) / 3).toFixed(1);
+
         const newReview = {
             id: Date.now(),
             name: document.getElementById('resName').value,
             location: document.getElementById('resLocation').value,
             type: document.getElementById('resType').value,
-            notes: document.getElementById('resNotes').value,
-            scores: {
-                starter: parseInt(document.getElementById('rateStarter').value),
-                main: parseInt(document.getElementById('rateMain').value),
-                dessert: parseInt(document.getElementById('rateDessert').value),
-                drinks: parseInt(document.getElementById('rateDrinks').value),
-                value: parseInt(document.getElementById('rateValue').value),
-                ambiance: parseInt(document.getElementById('rateAmbiance').value)
-            }
+            scores: { value: valueScore, ambiance: ambianceScore },
+            diners: dinersData,
+            foodAvg: foodAvg.toFixed(1),
+            overall: overallScore
         };
 
-        // Calculate Averages
-        newReview.foodAvg = ((newReview.scores.starter + newReview.scores.main + newReview.scores.dessert) / 3).toFixed(1);
-        let totalScore = 0;
-        for (let key in newReview.scores) { totalScore += newReview.scores[key]; }
-        newReview.overall = (totalScore / 6).toFixed(1);
-
         reviews.push(newReview);
-        localStorage.setItem('restaurantReviews', JSON.stringify(reviews));
+        localStorage.setItem('neonReviews', JSON.stringify(reviews));
         
-        form.reset();
+        // Reset form and UI
+        this.reset();
+        document.getElementById('dinersContainer').innerHTML = '';
+        addDiner(); // Reset to one blank diner
         updateUI();
     });
 
-    sortFilter.addEventListener('change', updateUI);
+    document.getElementById('sortFilter').addEventListener('change', updateUI);
 
-    // Update the UI
     function updateUI() {
         renderHistory();
         renderTop3();
     }
 
     function renderHistory() {
-        historyList.innerHTML = '';
+        const list = document.getElementById('historyList');
+        list.innerHTML = '';
         if(reviews.length === 0) {
-            historyList.innerHTML = '<p>No reviews yet. Add your first meal!</p>';
+            list.innerHTML = '<p style="color:#888;">No data yet. Get eating!</p>';
             return;
         }
 
-        // Show latest 10 reviews
-        const reversed = [...reviews].reverse().slice(0, 10);
+        const reversed = [...reviews].reverse().slice(0, 5);
         
         reversed.forEach(rev => {
-            historyList.innerHTML += `
+            let dishesPreview = '';
+            rev.diners.forEach(d => {
+                dishesPreview += `<span style="color:#888; font-size:12px;"><b>${d.name}:</b> ${d.dishes.length} items. </span>`;
+            });
+
+            list.innerHTML += `
                 <div class="history-item">
-                    <strong>${rev.name}</strong> <span class="tag">${rev.type}</span> <span class="tag">📍 ${rev.location}</span><br>
-                    <small><em>"${rev.notes}"</em></small><br>
-                    <small>Overall: ${rev.overall}/10 | Food: ${rev.foodAvg}/10 | Value: ${rev.scores.value}/10</small>
+                    <strong style="color:var(--neon-pink); font-size: 18px;">${rev.name}</strong> 
+                    <span class="tag">${rev.type}</span><br>
+                    <div style="margin: 5px 0;">${dishesPreview}</div>
+                    <small style="color:var(--neon-cyan);">Overall: ${rev.overall}/10 | Food Avg: ${rev.foodAvg}/10</small>
                 </div>
             `;
         });
     }
 
     function renderTop3() {
-        top3List.innerHTML = '';
+        const list = document.getElementById('top3List');
+        list.innerHTML = '';
         if(reviews.length === 0) {
-            top3List.innerHTML = '<p>Need more data to show the Top 3!</p>';
+            list.innerHTML = '<p style="color:#888;">Add reviews to see the leaderboard!</p>';
             return;
         }
 
-        const criteria = sortFilter.value; // overall, foodAvg, value, ambiance, main
+        const criteria = document.getElementById('sortFilter').value;
         
-        // Sort array based on selected criteria
         let sorted = [...reviews].sort((a, b) => {
             if (criteria === 'overall') return b.overall - a.overall;
             if (criteria === 'foodAvg') return b.foodAvg - a.foodAvg;
             if (criteria === 'value') return b.scores.value - a.scores.value;
             if (criteria === 'ambiance') return b.scores.ambiance - a.scores.ambiance;
-            if (criteria === 'main') return b.scores.main - a.scores.main;
         });
 
-        // Get Top 3
         const top3 = sorted.slice(0, 3);
 
         top3.forEach((rev, index) => {
             let scoreDisplay = '';
-            if (criteria === 'overall') scoreDisplay = `${rev.overall} / 10`;
-            if (criteria === 'foodAvg') scoreDisplay = `${rev.foodAvg} / 10`;
-            if (criteria === 'value') scoreDisplay = `${rev.scores.value} / 10`;
-            if (criteria === 'ambiance') scoreDisplay = `${rev.scores.ambiance} / 10`;
-            if (criteria === 'main') scoreDisplay = `${rev.scores.main} / 10`;
+            if (criteria === 'overall') scoreDisplay = `${rev.overall}`;
+            if (criteria === 'foodAvg') scoreDisplay = `${rev.foodAvg}`;
+            if (criteria === 'value') scoreDisplay = `${rev.scores.value}`;
+            if (criteria === 'ambiance') scoreDisplay = `${rev.scores.ambiance}`;
 
-            top3List.innerHTML += `
+            list.innerHTML += `
                 <div class="winner-card">
                     <div class="winner-rank">#${index + 1}</div>
-                    <div style="flex-grow: 1; margin-left: 15px;">
-                        <h3 style="margin: 0;">${rev.name}</h3>
-                        <small>${rev.type} • 📍 ${rev.location}</small>
+                    <div style="flex-grow: 1;">
+                        <h3 style="margin: 0; color: #fff;">${rev.name}</h3>
+                        <small style="color: #888;">${rev.type} • ${rev.location}</small>
                     </div>
-                    <div style="font-size: 20px; font-weight: bold;">
+                    <div style="font-size: 24px; font-weight: bold; color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan);">
                         ${scoreDisplay}
                     </div>
                 </div>
             `;
         });
     }
-
-    // Initial load
-    updateUI();
 </script>
 
 </body>
