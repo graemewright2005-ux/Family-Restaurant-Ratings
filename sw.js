@@ -1,19 +1,19 @@
-const CACHE_NAME = 'neon-bites-v1';
+const CACHE_NAME = 'neon-bites-v2'; // Bumped to v2 to force a clean update
 
-// These are the files your phone will download to use offline
+// Using relative paths (./) so it works perfectly on GitHub Pages
 const ASSETS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/icon-192.png',
-    '/icon-512.png'
+    './',
+    './index.html',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png'
 ];
 
 // 1. Install Event: Caches our files when the app is first loaded
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('Opened cache');
+            console.log('Opened cache v2');
             return cache.addAll(ASSETS_TO_CACHE);
         })
     );
@@ -26,6 +26,7 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME) {
+                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
