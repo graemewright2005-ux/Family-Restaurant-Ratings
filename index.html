@@ -11,6 +11,7 @@
             --neon-cyan: #00f3ff;
             --neon-pink: #ff00ff;
             --neon-green: #39ff14;
+            --neon-yellow: #ffea00;
             --text-main: #e0e0e0;
         }
         body {
@@ -24,36 +25,60 @@
             max-width: 1000px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr; /* Switched to 1fr for the tabbed layout */
             gap: 20px;
         }
-        @media (max-width: 800px) { .container { grid-template-columns: 1fr; } }
-        header { text-align: center; grid-column: 1 / -1; margin-bottom: 20px; }
+        header { text-align: center; margin-bottom: 10px; }
         h1 { color: #fff; text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); margin-bottom: 5px; }
-        h2 { color: var(--neon-pink); text-shadow: 0 0 5px rgba(255, 0, 255, 0.5); border-bottom: 1px solid var(--neon-pink); padding-bottom: 10px; }
+        h2 { color: var(--neon-pink); text-shadow: 0 0 5px rgba(255, 0, 255, 0.5); border-bottom: 1px solid var(--neon-pink); padding-bottom: 10px; margin-top: 0; }
+        
+        /* Tab Navigation */
+        .tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+        .tab-btn { background: #222; border: 1px solid #444; color: #aaa; padding: 12px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 16px; font-weight: bold; flex: 1; min-width: 150px;}
+        .tab-btn:hover { border-color: var(--neon-cyan); color: #fff; }
+        .tab-btn.active { background: var(--card-bg); color: var(--neon-cyan); border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .card { background: var(--card-bg); padding: 20px; border-radius: 10px; border: 1px solid #333; box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 14px; margin-bottom: 5px; color: #aaa; }
         input, select, textarea { width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; box-sizing: border-box; transition: all 0.3s ease; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 8px rgba(0, 243, 255, 0.4); }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        
         button { background: transparent; color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 10px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; }
         button:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
         .btn-pink { color: var(--neon-pink); border-color: var(--neon-pink); }
         .btn-pink:hover { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
         .btn-green { color: var(--neon-green); border-color: var(--neon-green); margin-top: 15px; }
         .btn-green:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
+        
         .diner-section { background: #252525; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 3px solid var(--neon-cyan); }
         .dish-row { display: grid; grid-template-columns: 2fr 2fr 3fr 1fr; gap: 10px; margin-top: 10px; align-items: end; background: #1a1a1a; padding: 10px; border-radius: 5px; border: 1px dashed #444; }
+        @media (max-width: 800px) { .dish-row { grid-template-columns: 1fr; gap: 5px; } }
+        
         .remove-btn { color: #ff4444; border-color: #ff4444; padding: 10px 5px; font-size: 12px; }
         .remove-btn:hover { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
-        .top-three { grid-column: 1 / -1; }
-        .dashboard-controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; background: #222; padding: 10px; border-radius: 5px; }
+        
+        .dashboard-controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; background: #222; padding: 15px; border-radius: 5px; flex-wrap: wrap; }
+        .dashboard-controls select, .dashboard-controls input { flex: 1; min-width: 150px; }
+        
         .winner-card { background: #222; border: 1px solid #333; border-left: 4px solid var(--neon-green); padding: 15px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; }
         .winner-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(57, 255, 20, 0.2); }
         .winner-rank { font-size: 24px; font-weight: bold; color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); margin-right: 15px; }
-        .history-item { border-bottom: 1px solid #333; padding: 15px 0; }
+        
+        .history-item { border-bottom: 1px solid #333; padding: 15px 0; display: flex; flex-direction: column; gap: 8px; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .tag { background: #333; padding: 4px 10px; border-radius: 12px; font-size: 11px; color: var(--neon-cyan); border: 1px solid var(--neon-cyan); }
+        .tag-price { color: var(--neon-green); border-color: var(--neon-green); }
+        .tag-verdict { color: var(--neon-yellow); border-color: var(--neon-yellow); }
         #status-indicator { text-align: center; font-size: 12px; color: var(--neon-pink); margin-top: 10px; }
     </style>
 </head>
@@ -66,68 +91,107 @@
         <div id="status-indicator">Connecting to Database...</div>
     </header>
 
-    <div class="card" style="grid-column: 1 / -1;">
-        <h2>Add a New Visit</h2>
-        <form id="reviewForm">
-            <div class="grid-2">
-                <div class="form-group"><label>Restaurant Name</label><input type="text" id="resName" required placeholder="Where did we eat?"></div>
-                <div class="form-group"><label>Location</label><input type="text" id="resLocation" required placeholder="City or area"></div>
-            </div>
-            
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Cuisine Type</label>
-                    <select id="resType">
-                        <option value="Italian">Italian</option>
-                        <option value="Thai">Thai</option>
-                        <option value="Portuguese">Portuguese</option>
-                        <option value="Tapas">Tapas</option>
-                        <option value="Indian">Indian</option>
-                        <option value="British">British</option>
-                        <option value="Other">Other</option>
-                    </select>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="window.switchTab('log')">📝 Log a Meal</button>
+        <button class="tab-btn" onclick="window.switchTab('deep-dive')">🔍 Deep Dive</button>
+        <button class="tab-btn" onclick="window.switchTab('vault')">🗄️ The Vault</button>
+    </div>
+
+    <div id="tab-log" class="tab-content active">
+        <div class="card">
+            <h2>Add a New Visit</h2>
+            <form id="reviewForm">
+                <div class="grid-2">
+                    <div class="form-group"><label>Restaurant Name</label><input type="text" id="resName" required placeholder="Where did we eat?"></div>
+                    <div class="form-group"><label>Location</label><input type="text" id="resLocation" required placeholder="City or area"></div>
                 </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Cuisine Type</label>
+                        <select id="resType">
+                            <option value="Italian">Italian</option>
+                            <option value="Thai">Thai</option>
+                            <option value="Portuguese">Portuguese</option>
+                            <option value="Tapas">Tapas</option>
+                            <option value="Indian">Indian</option>
+                            <option value="British">British</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Price Tier</label>
+                            <select id="resPrice">
+                                <option value="£">£</option>
+                                <option value="££">££</option>
+                                <option value="£££">£££</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Return Verdict</label>
+                            <select id="resVerdict">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid-2">
                     <div class="form-group"><label>Value (1-10)</label><input type="number" id="rateValue" min="1" max="10" required></div>
                     <div class="form-group"><label>Ambiance (1-10)</label><input type="number" id="rateAmbiance" min="1" max="10" required></div>
                 </div>
-            </div>
 
-            <div id="dinersContainer"></div>
-            
-            <div style="display: flex; gap: 10px;">
-                <button type="button" class="btn-pink" onclick="window.addDiner()">+ Add Family Member</button>
-                <button type="submit" class="btn-green" id="submitBtn">💾 Save to Cloud</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="card">
-        <h2>Recent Meals</h2>
-        <div id="historyList"></div>
-    </div>
-
-    <div class="card top-three">
-        <h2>🏆 Top 3 Leaderboard</h2>
-        <div class="dashboard-controls">
-            <label style="margin: 0; color: #fff;">Sort by:</label>
-            <select id="sortFilter" style="width: 250px;">
-                <option value="overall">Highest Overall Average</option>
-                <option value="foodAvg">Best Food (Family Average)</option>
-                <option value="value">Best Value</option>
-                <option value="ambiance">Best Ambiance</option>
-            </select>
+                <div id="dinersContainer"></div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn-pink" onclick="window.addDiner()">+ Add Family Member</button>
+                    <button type="submit" class="btn-green" id="submitBtn">💾 Save to Cloud</button>
+                </div>
+            </form>
         </div>
-        <div id="top3List"></div>
     </div>
+
+    <div id="tab-deep-dive" class="tab-content">
+        <div class="card">
+            <h2>🏆 Deep Dive Leaderboard</h2>
+            <div class="dashboard-controls">
+                <input type="text" id="searchInput" placeholder="Search dish or restaurant...">
+                <select id="locationFilter">
+                    <option value="all">All Locations</option>
+                </select>
+                <select id="courseFilter">
+                    <option value="all">All Courses</option>
+                    <option value="Starter">Starter</option>
+                    <option value="Main">Main</option>
+                    <option value="Dessert">Dessert</option>
+                    <option value="Drink">Drink</option>
+                </select>
+                <select id="sortFilter">
+                    <option value="overall">Sort: Highest Overall Average</option>
+                    <option value="foodAvg">Sort: Best Food (Family Average)</option>
+                    <option value="value">Sort: Best Value</option>
+                    <option value="ambiance">Sort: Best Ambiance</option>
+                </select>
+            </div>
+            <div id="top3List"></div>
+        </div>
+    </div>
+
+    <div id="tab-vault" class="tab-content">
+        <div class="card">
+            <h2>🗄️ The Vault (Full History)</h2>
+            <div id="historyList"></div>
+        </div>
+    </div>
+
 </div>
 
 <script type="module">
-    // CORRECTED IMPORTS: Browsers need the full URL to the Firebase libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    // Your exact Firebase config
     const firebaseConfig = {
         apiKey: "AIzaSyCKT4ElJIQGNF_hfkYsss1_fPABIgfxBwc",
         authDomain: "family-food-tracker-cf1c5.firebaseapp.com",
@@ -137,10 +201,18 @@
         appId: "1:447280140705:web:5686153d7bfbffd68afbe0"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let reviews = [];
+
+    // --- Tab Switching Logic ---
+    window.switchTab = function(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+        event.currentTarget.classList.add('active');
+    };
 
     // --- UI Dynamic Functions ---
     let dinerCount = 0;
@@ -197,7 +269,6 @@
         container.insertAdjacentHTML('beforeend', html);
     };
 
-    // Initialize with one diner
     window.addDiner();
 
     // --- Database Save Logic ---
@@ -235,11 +306,13 @@
             name: document.getElementById('resName').value,
             location: document.getElementById('resLocation').value,
             type: document.getElementById('resType').value,
+            priceTier: document.getElementById('resPrice').value,     // NEW FIELD
+            verdict: document.getElementById('resVerdict').value,   // NEW FIELD
             scores: { value: valueScore, ambiance: ambianceScore },
             diners: dinersData,
             foodAvg: parseFloat(foodAvg.toFixed(1)),
             overall: overallScore,
-            timestamp: serverTimestamp() // Tells Firebase to log exact time
+            timestamp: serverTimestamp() 
         };
 
         try {
@@ -247,6 +320,8 @@
             this.reset();
             document.getElementById('dinersContainer').innerHTML = '';
             window.addDiner();
+            // Automatically switch to Deep Dive tab after logging
+            window.switchTab('deep-dive');
         } catch (error) {
             console.error("Error adding document: ", error);
             alert("Error saving! Check the browser console.");
@@ -265,15 +340,36 @@
         });
         document.getElementById('status-indicator').innerText = "🟢 Live Connected to Firebase";
         document.getElementById('status-indicator').style.color = "var(--neon-green)";
+        updateLocationDropdown();
         updateUI();
     }, (error) => {
         document.getElementById('status-indicator').innerText = "🔴 Disconnected (Check Rules)";
         console.error("Firebase listen error:", error);
     });
 
+    // Attach listeners for dynamic filtering
     document.getElementById('sortFilter').addEventListener('change', updateUI);
+    document.getElementById('searchInput').addEventListener('input', updateUI);
+    document.getElementById('locationFilter').addEventListener('change', updateUI);
+    document.getElementById('courseFilter').addEventListener('change', updateUI);
 
     // --- Rendering UI ---
+    function updateLocationDropdown() {
+        const select = document.getElementById('locationFilter');
+        const currentSelection = select.value;
+        
+        // Extract unique locations from data
+        const locations = new Set(reviews.map(r => r.location));
+        
+        let html = '<option value="all">All Locations</option>';
+        locations.forEach(loc => {
+            if(loc) html += `<option value="${loc}">${loc}</option>`;
+        });
+        
+        select.innerHTML = html;
+        select.value = currentSelection || 'all'; // Restore selection if it existed
+    }
+
     function updateUI() {
         renderHistory();
         renderTop3();
@@ -287,7 +383,8 @@
             return;
         }
 
-        reviews.slice(0, 5).forEach(rev => { // Only show latest 5
+        // The Vault shows ALL reviews, mapped out
+        reviews.forEach(rev => { 
             let dishesPreview = '';
             if (rev.diners) {
                 rev.diners.forEach(d => {
@@ -295,10 +392,23 @@
                 });
             }
 
+            // Defaults in case old documents don't have the new fields yet
+            const price = rev.priceTier || "N/A";
+            const verdict = rev.verdict ? (rev.verdict === 'Yes' ? 'Return: Yes 👍' : 'Return: No 👎') : "N/A";
+
             list.innerHTML += `
                 <div class="history-item">
-                    <strong style="color:var(--neon-pink); font-size: 18px;">${rev.name}</strong> 
-                    <span class="tag">${rev.type}</span><br>
+                    <div class="history-header">
+                        <div>
+                            <strong style="color:var(--neon-pink); font-size: 18px;">${rev.name}</strong> 
+                            <span style="color:#888; font-size: 14px;">(${rev.location})</span>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <span class="tag">${rev.type}</span>
+                            <span class="tag tag-price">${price}</span>
+                            <span class="tag tag-verdict">${verdict}</span>
+                        </div>
+                    </div>
                     <div style="margin: 5px 0;">${dishesPreview}</div>
                     <small style="color:var(--neon-cyan);">Overall: ${rev.overall}/10 | Food Avg: ${rev.foodAvg}/10</small>
                 </div>
@@ -309,26 +419,65 @@
     function renderTop3() {
         const list = document.getElementById('top3List');
         list.innerHTML = '';
+        
         if(reviews.length === 0) {
             list.innerHTML = '<p style="color:#888;">Add reviews to see the leaderboard!</p>';
             return;
         }
 
         const criteria = document.getElementById('sortFilter').value;
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const locFilter = document.getElementById('locationFilter').value;
+        const courseFilter = document.getElementById('courseFilter').value;
         
-        let sorted = [...reviews].sort((a, b) => {
+        // 1. Filter the dataset based on selections
+        let filteredReviews = reviews.filter(rev => {
+            // Check Location
+            if (locFilter !== 'all' && rev.location !== locFilter) return false;
+            
+            // Check Search and Course
+            let matchesSearch = searchText === '';
+            let matchesCourse = courseFilter === 'all';
+            
+            // Check if restaurant name matches search
+            if (!matchesSearch && rev.name.toLowerCase().includes(searchText)) {
+                matchesSearch = true;
+            }
+
+            // Check inner diner arrays to see if any dish matches search/course
+            if (rev.diners) {
+                for (let diner of rev.diners) {
+                    for (let dish of diner.dishes) {
+                        if (courseFilter !== 'all' && dish.course === courseFilter) matchesCourse = true;
+                        if (searchText !== '' && dish.desc.toLowerCase().includes(searchText)) matchesSearch = true;
+                    }
+                }
+            }
+            
+            return matchesCourse && matchesSearch;
+        });
+
+        if (filteredReviews.length === 0) {
+            list.innerHTML = '<p style="color:#888;">No matches found for these filters.</p>';
+            return;
+        }
+
+        // 2. Sort the filtered dataset
+        let sorted = [...filteredReviews].sort((a, b) => {
             if (criteria === 'overall') return b.overall - a.overall;
             if (criteria === 'foodAvg') return b.foodAvg - a.foodAvg;
             if (criteria === 'value') return b.scores.value - a.scores.value;
             if (criteria === 'ambiance') return b.scores.ambiance - a.scores.ambiance;
         });
 
+        // 3. Render Top 3
         sorted.slice(0, 3).forEach((rev, index) => {
             let scoreDisplay = '';
-            if (criteria === 'overall') scoreDisplay = `${rev.overall}`;
-            if (criteria === 'foodAvg') scoreDisplay = `${rev.foodAvg}`;
-            if (criteria === 'value') scoreDisplay = `${rev.scores.value}`;
-            if (criteria === 'ambiance') scoreDisplay = `${rev.scores.ambiance}`;
+            let subtitle = '';
+            if (criteria === 'overall') { scoreDisplay = `${rev.overall}`; subtitle = "Overall"; }
+            if (criteria === 'foodAvg') { scoreDisplay = `${rev.foodAvg}`; subtitle = "Food"; }
+            if (criteria === 'value') { scoreDisplay = `${rev.scores.value}`; subtitle = "Value"; }
+            if (criteria === 'ambiance') { scoreDisplay = `${rev.scores.ambiance}`; subtitle = "Ambiance"; }
 
             list.innerHTML += `
                 <div class="winner-card">
@@ -337,8 +486,11 @@
                         <h3 style="margin: 0; color: #fff;">${rev.name}</h3>
                         <small style="color: #888;">${rev.type} • ${rev.location}</small>
                     </div>
-                    <div style="font-size: 24px; font-weight: bold; color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan);">
-                        ${scoreDisplay}
+                    <div style="text-align: right;">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan);">
+                            ${scoreDisplay}
+                        </div>
+                        <small style="color:#888; font-size:10px;">${subtitle}</small>
                     </div>
                 </div>
             `;
