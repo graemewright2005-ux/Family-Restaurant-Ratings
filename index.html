@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neon Restaurant Reviews</title>
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Neon Bites">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="theme-color" content="#0d0d0d">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Neon Bites">
-<link rel="apple-touch-icon" href="icon-192.png">
-
-<meta name="theme-color" content="#0d0d0d">
     <style>
         :root {
             --bg-color: #0d0d0d;
@@ -34,7 +34,7 @@
             max-width: 1000px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr; /* Switched to 1fr for the tabbed layout */
+            grid-template-columns: 1fr;
             gap: 20px;
         }
         header { text-align: center; margin-bottom: 10px; }
@@ -199,7 +199,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { initializeFirestore, persistentLocalCache, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCKT4ElJIQGNF_hfkYsss1_fPABIgfxBwc",
@@ -211,7 +211,11 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    // Initialize Firestore with Offline Persistence
+    const db = initializeFirestore(app, {
+        localCache: persistentLocalCache()
+    });
+    
     let reviews = [];
 
     // --- Tab Switching Logic ---
@@ -315,8 +319,8 @@
             name: document.getElementById('resName').value,
             location: document.getElementById('resLocation').value,
             type: document.getElementById('resType').value,
-            priceTier: document.getElementById('resPrice').value,     // NEW FIELD
-            verdict: document.getElementById('resVerdict').value,   // NEW FIELD
+            priceTier: document.getElementById('resPrice').value,     
+            verdict: document.getElementById('resVerdict').value,   
             scores: { value: valueScore, ambiance: ambianceScore },
             diners: dinersData,
             foodAvg: parseFloat(foodAvg.toFixed(1)),
@@ -329,7 +333,6 @@
             this.reset();
             document.getElementById('dinersContainer').innerHTML = '';
             window.addDiner();
-            // Automatically switch to Deep Dive tab after logging
             window.switchTab('deep-dive');
         } catch (error) {
             console.error("Error adding document: ", error);
@@ -339,20 +342,28 @@
         }
     });
 
-    // --- Real-Time Sync Logic ---
+    // --- Real-Time Sync Logic (Offline-Aware) ---
     const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
     
-    onSnapshot(q, (snapshot) => {
+    onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
         reviews = [];
         snapshot.forEach((doc) => {
             reviews.push({ id: doc.id, ...doc.data() });
         });
-        document.getElementById('status-indicator').innerText = "🟢 Live Connected to Firebase";
-        document.getElementById('status-indicator').style.color = "var(--neon-green)";
+        
+        // Check if data is coming from the local cache or live server
+        if (snapshot.metadata.fromCache) {
+            document.getElementById('status-indicator').innerText = "🟡 Offline Mode (Showing Saved Data)";
+            document.getElementById('status-indicator').style.color = "var(--neon-yellow)";
+        } else {
+            document.getElementById('status-indicator').innerText = "🟢 Live Connected to Firebase";
+            document.getElementById('status-indicator').style.color = "var(--neon-green)";
+        }
+        
         updateLocationDropdown();
         updateUI();
     }, (error) => {
-        document.getElementById('status-indicator').innerText = "🔴 Disconnected (Check Rules)";
+        document.getElementById('status-indicator').innerText = "🔴 Disconnected";
         console.error("Firebase listen error:", error);
     });
 
@@ -367,7 +378,6 @@
         const select = document.getElementById('locationFilter');
         const currentSelection = select.value;
         
-        // Extract unique locations from data
         const locations = new Set(reviews.map(r => r.location));
         
         let html = '<option value="all">All Locations</option>';
@@ -376,7 +386,7 @@
         });
         
         select.innerHTML = html;
-        select.value = currentSelection || 'all'; // Restore selection if it existed
+        select.value = currentSelection || 'all'; 
     }
 
     function updateUI() {
@@ -392,7 +402,6 @@
             return;
         }
 
-        // The Vault shows ALL reviews, mapped out
         reviews.forEach(rev => { 
             let dishesPreview = '';
             if (rev.diners) {
@@ -401,7 +410,6 @@
                 });
             }
 
-            // Defaults in case old documents don't have the new fields yet
             const price = rev.priceTier || "N/A";
             const verdict = rev.verdict ? (rev.verdict === 'Yes' ? 'Return: Yes 👍' : 'Return: No 👎') : "N/A";
 
@@ -441,19 +449,15 @@
         
         // 1. Filter the dataset based on selections
         let filteredReviews = reviews.filter(rev => {
-            // Check Location
             if (locFilter !== 'all' && rev.location !== locFilter) return false;
             
-            // Check Search and Course
             let matchesSearch = searchText === '';
             let matchesCourse = courseFilter === 'all';
             
-            // Check if restaurant name matches search
             if (!matchesSearch && rev.name.toLowerCase().includes(searchText)) {
                 matchesSearch = true;
             }
 
-            // Check inner diner arrays to see if any dish matches search/course
             if (rev.diners) {
                 for (let diner of rev.diners) {
                     for (let dish of diner.dishes) {
@@ -506,6 +510,7 @@
         });
     }
 </script>
+
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
